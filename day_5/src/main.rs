@@ -53,7 +53,7 @@ fn move_collect(board: &mut Vec<Vec<&str>>, move_count: usize, move_from_index: 
 /// Collects the top elements of all stacks into a string.
 fn generate_last_item_string(board: Vec<Vec<&str>>) -> String {
     let mut value_string: String = String::new();
-    for stack in &*board {
+    for stack in board {
         value_string.push_str(stack.last().unwrap());
     }
 
