@@ -30,7 +30,7 @@ fn main() {
         let part_1_pos = solver(line, 4);
         let part_2_pos = solver(line, 14);
 
-        println!("{part_1_pos}");
-        println!("{part_2_pos}");
+        println!("Part-1: {part_1_pos}");
+        println!("Part-2: {part_2_pos}");
     }
 }
