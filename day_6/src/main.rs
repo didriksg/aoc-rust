@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-use utility_library::read_file;
 
 fn solver(input_signal: &str, value_needed: usize) -> usize {
     let mut pointer = 0;
