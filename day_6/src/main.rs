@@ -20,7 +20,7 @@ fn solver(input_signal: &str, value_needed: usize) -> usize {
 
 
 fn main() {
-    let lines = read_file("/home/didrik/git/aoc-rust/day_6/input.txt");
+    let lines = include_str!("../input.txt");
 
     for line in lines.split("\n") {
         let part_1_pos = solver(line, 4);

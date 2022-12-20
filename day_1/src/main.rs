@@ -1,4 +1,4 @@
-use utility_library::read_file;
+// use utility_library::read_file;
 
 fn sum_file(file_contents: String) -> Vec<i32> {
     let split_string = file_contents.split("\n");
@@ -25,7 +25,7 @@ fn summed_top_3(mut summed_values: Vec<i32>) -> i32 {
     summed_values.sort();
 
     let vector_size = summed_values.len();
-    let top_3 = summed_values[vector_size-3..vector_size].iter().sum();
+    let top_3 = summed_values[vector_size - 3..vector_size].iter().sum();
 
     return top_3;
 }
@@ -33,15 +33,22 @@ fn summed_top_3(mut summed_values: Vec<i32>) -> i32 {
 
 pub fn main() {
     // Part 1:
-    let file_path = "/home/didrik/IdeaProjects/aoc_testing/input_file.txt";
-    let file_contents = read_file(file_path);
-    let summed_values_vec = sum_file(file_contents);
-    let largest_value = summed_values_vec.iter().max().unwrap();
+    let str_lines = include_str!("../input_file.txt")
+        .split("\n\n")
+        .map(|e| e.lines().map(|c| c.parse::<u32>().unwrap()).sum::<u32>())
+        .max()
+        .unwrap();
 
-    println!("Largest value: {}", largest_value);
+    println!("{:?}", str_lines);
+    // let file_path = "/home/didrik/IdeaProjects/aoc_testing/input_file.txt";
+    // let file_contents = read_file(file_path);
+    // let summed_values_vec = sum_file(file_contents);
+    // let largest_value = summed_values_vec.iter().max().unwrap();
+    //
+    // println!("Largest value: {}", largest_value);
 
     // Part 2:
-    let summed_top_3 = summed_top_3(summed_values_vec);
+    // let summed_top_3 = summed_top_3(summed_values_vec);
 
-    println!("Summed top-3: {}", summed_top_3);
+    // println!("Summed top-3: {}", summed_top_3);
 }

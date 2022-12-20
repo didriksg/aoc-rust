@@ -1,5 +1,3 @@
-use utility_library::read_file;
-
 use regex::Regex;
 
 
@@ -39,7 +37,6 @@ fn move_push_pop(board: &mut Vec<Vec<&str>>, move_count: usize, move_from_index:
         let move_val = board[move_from_index].pop().unwrap();
         board[move_to_index].push(move_val);
     }
-
 }
 
 /// Moves and keeps order.
@@ -87,17 +84,12 @@ fn process_instructions_stack(board: Vec<Vec<&str>>, instruction_set: &str) {
 }
 
 
-fn part_1(input_lines: &String) {
-    let split_values: Vec<&str> = input_lines.split("\n\n").collect();
+fn main() {
+    let lines = include_str!("../input.txt");
+    let split_values: Vec<&str> = lines.split("\n\n").collect();
 
     let board = parse_board(split_values[0]);
     let info_lines = split_values[1];
 
     process_instructions_stack(board, info_lines);
-}
-
-
-fn main() {
-    let lines = read_file("/home/didrik/IdeaProjects/aoc/day_5/test_input.txt");
-    part_1(&lines);
 }
