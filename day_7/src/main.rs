@@ -20,18 +20,16 @@ fn add_to_size(folder: &Rc<RefCell<Folder>>, value: usize) {
     folder.size = Some(value);
 }
 
-fn process_command<'a>(command: &str, current_folder: &Rc<RefCell<Folder>>, all_folders: &mut Vec<Rc<RefCell<Folder>>>) -> Rc<RefCell<Folder>> {
+fn process_command(command: &str, current_folder: &Rc<RefCell<Folder>>, all_folders: &mut Vec<Rc<RefCell<Folder>>>) -> Rc<RefCell<Folder>> {
     return if command.contains("$ ls") {
         Rc::clone(current_folder)
-
     } else if command.contains("$ cd ..") {
         let current_clone = Rc::clone(current_folder);
-        let current = Rc::clone(current_clone.borrow().parent.as_ref().unwrap());
-        let new_value = current_folder.borrow().size.unwrap() + current.borrow().size.unwrap();
+        let parent = Rc::clone(current_clone.borrow().parent.as_ref().unwrap());
+        let new_size = current_folder.borrow().size.unwrap() + parent.borrow().size.unwrap();
+        add_to_size(&parent, new_size);
 
-        add_to_size(&current, new_value);
-
-        current
+        parent
     } else {
         let child = Rc::new(RefCell::new(Folder::new()));
         {
@@ -46,7 +44,7 @@ fn process_command<'a>(command: &str, current_folder: &Rc<RefCell<Folder>>, all_
 }
 
 
-fn add_to_folder(command: &str, current_folder: &mut Rc<RefCell<Folder>>) {
+fn add_to_folder(command: &str, current_folder: &Rc<RefCell<Folder>>) {
     if command.contains("dir") { return; }
 
     let (size_str, _) = command.split_once(" ").unwrap();
@@ -63,14 +61,13 @@ fn main() {
 
     all_folders.push(root.clone());
 
-    let commands = include_str!("../input.txt").lines();
+    let commands = include_str!("../input.txt").lines().skip(1);
 
-    for command in commands.skip(1) {
+    for command in commands {
         if command.contains("$") {
             current = process_command(command, &current, &mut all_folders);
-
         } else {
-            add_to_folder(command, &mut current);
+            add_to_folder(command, &current);
         }
     }
 
@@ -89,8 +86,6 @@ fn main() {
         .filter(|c| *c <= 100000)
         .sum();
 
-    println!("Part-1: {part_1_answer}");
-
     const TOTAL_SPACE: usize = 70000000;
     const SPACE_NEEDED_FOR_UPDATE: usize = 30000000;
     let unused_space = TOTAL_SPACE - &root.borrow().size.unwrap();
@@ -102,5 +97,6 @@ fn main() {
         .min()
         .unwrap();
 
+    println!("Part-1: {part_1_answer}");
     println!("Part-2: {part_2_answer}");
 }
