@@ -37,15 +37,16 @@ fn move_tail(head: &Coordinate, tail: &mut Coordinate) {
         tail.y += 1;
     }
 
+    if (head.x < tail.x - 1 && head.y > tail.y) || (head.x < tail.x && head.y == tail.y + 2) {
+        tail.x -= 1;
+        tail.y += 1;
+    }
+
     if (head.x < tail.x && head.y < tail.y - 1) || (head.x == tail.x - 2 && head.y < tail.y) {
         tail.x -= 1;
         tail.y -= 1;
     }
 
-    if (head.x < tail.x - 1 && head.y > tail.y) || (head.x < tail.x && head.y == tail.y + 2) {
-        tail.x -= 1;
-        tail.y += 1;
-    }
 
     if (head.x > tail.x + 1 && head.y < tail.y) || (head.x > tail.x && head.y == tail.y - 2) {
         tail.x += 1;
