@@ -12,12 +12,12 @@ fn write_pixel(signal_vector: &mut Vec<&str>, current_cycle: &mut usize, registe
     *current_cycle += 1;
 }
 
-fn execute_commands(commands: &Vec<&str>) -> i32 {
+fn execute_commands(commands: &Vec<&str>) -> (i32, Vec<&'static str>) {
     const MAX_CYCLES: usize = 240;
     let mut register: i32 = 1;
     let mut cycle: usize = 0;
 
-    let read_out_cycles: [i32; 6] = [20, 60, 100, 140, 180, 220];
+    let read_out_cycles: Vec<i32> = (20..=220).step_by(40).collect();
     let mut read_out_cycle_pointer = 0;
     let mut signal_strengths = vec![0; 6];
 
@@ -25,12 +25,13 @@ fn execute_commands(commands: &Vec<&str>) -> i32 {
 
     for command in commands {
         match *command {
-            "noop" => { write_pixel(&mut crt_signal, &mut cycle, register, ); }
+            "noop" => write_pixel(&mut crt_signal, &mut cycle, register),
 
             add_command => {
                     write_pixel(&mut crt_signal, &mut cycle, register);
                     write_pixel(&mut crt_signal, &mut cycle, register);
 
+                // Read out signal strength at given cycle numbers.
                 if read_out_cycle_pointer < read_out_cycles.len() && read_out_cycles[read_out_cycle_pointer] <= cycle as i32 {
                     signal_strengths[read_out_cycle_pointer] = read_out_cycles[read_out_cycle_pointer] * register;
                     read_out_cycle_pointer += 1;
@@ -44,12 +45,7 @@ fn execute_commands(commands: &Vec<&str>) -> i32 {
         }
     }
 
-    // Print output CRT signal
-    for s in crt_signal.chunks(40) {
-        println!("{:?}", s);
-    }
-
-    return signal_strengths.iter().sum();
+    return (signal_strengths.iter().sum(), crt_signal);
 }
 
 fn main() {
@@ -57,6 +53,13 @@ fn main() {
         .lines()
         .collect();
 
-    let part_1 = execute_commands(&commands);
-    println!("{part_1}");
+    let (part_1, part_2) = execute_commands(&commands);
+
+    println!("Part-1: {part_1}");
+    println!("Part-2:");
+
+    // Print output CRT signal
+    for s in part_2.chunks(40) {
+        println!("{:?}", s);
+    }
 }
