@@ -16,21 +16,6 @@ impl Coordinate {
 }
 
 
-fn move_coordinate(coordinate: &mut Coordinate, direction: &str) {
-    if direction == "R" {
-        coordinate.x += 1
-    }
-    if direction == "L" {
-        coordinate.x -= 1
-    }
-    if direction == "U" {
-        coordinate.y += 1
-    }
-    if direction == "D" {
-        coordinate.y -= 1
-    }
-}
-
 fn move_tail(head: &Coordinate, tail: &mut Coordinate) {
     if (head.x > tail.x + 1 && head.y > tail.y) || (head.x > tail.x && head.y == tail.y + 2) {
         tail.x += 1;
@@ -66,7 +51,13 @@ fn move_head(iterator: &Vec<(&str, usize)>, coordinate_count: usize) -> usize {
 
     for (direction, count) in iterator {
         for _ in 0..*count {
-            move_coordinate(&mut coordinates[0], direction);
+            match *direction {
+                "R" => coordinates[0].x += 1,
+                "L" => coordinates[0].x -= 1,
+                "U" => coordinates[0].y += 1,
+                "D" => coordinates[0].y -= 1,
+                _ => ()
+            };
 
             for i in 1..coordinates.len() {
                 let mut tail = coordinates[i].clone();
